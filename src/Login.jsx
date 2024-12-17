@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';  
 import "bootstrap/dist/css/bootstrap.css";  
 import Container from 'react-bootstrap/Container';  
-import Navbar from 'react-bootstrap/Navbar';  
 import Form from 'react-bootstrap/Form';  
 import Row from 'react-bootstrap/Row';  
 import Col from 'react-bootstrap/Col';  
@@ -58,14 +57,17 @@ function Login() {
             backgroundPosition: 'center',  
             height: '100vh',  
             display: 'flex',  
+            color: 'white',  
         }}>  
             <Container fluid>  
                 <Row className="justify-content-end">  
                     <Col md={4} lg={3} className="p-3">  
                         <div className="card" style={{  
-                            backgroundColor: 'rgba(255, 255, 255, 0.8)',  
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',  
                             borderRadius: '10px',  
                             padding: '20px',  
+                            color: 'white',  
+                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',  
                         }}>  
                             <h2 style={{  
                                 textAlign: 'center',   
@@ -82,7 +84,9 @@ function Login() {
                                         type="text"  
                                         placeholder="Enter Username"  
                                         value={username}  
-                                        onChange={(e) => setUsername(e.target.value)} required  
+                                        onChange={(e) => setUsername(e.target.value)}  
+                                        style={{ backgroundColor: '#333', color: 'white', borderColor: '#555' }}  
+                                        required  
                                     />  
                                 </Form.Group>  
                                 <br />  
@@ -93,16 +97,18 @@ function Login() {
                                         type="password"  
                                         placeholder="Enter Password"  
                                         value={password}  
-                                        onChange={(e) => setPassword(e.target.value)} required  
+                                        onChange={(e) => setPassword(e.target.value)}  
+                                        style={{ backgroundColor: '#333', color: 'white', borderColor: '#555' }}  
+                                        required  
                                     />  
                                 </Form.Group>  
 
                                 {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}  
 
                                 <Button  
-                                    variant='dark'  
+                                    variant='light'  
                                     type="submit"  
-                                    style={{ width: '100%', marginTop: '15px' }}  
+                                    style={{ width: '100%', marginTop: '15px', backgroundColor: '#555', borderColor: '#777', color: 'white' }}  
                                 >  
                                     Login  
                                 </Button>  
@@ -110,7 +116,7 @@ function Login() {
                                 <div style={{ textAlign: 'center', marginTop: '10px' }}>  
                                     <p>  
                                         Don't have an account?{' '}  
-                                        <a href="/register" style={{ textDecoration: 'underline' }}>  
+                                        <a href="/register" style={{ color: '#bbb', textDecoration: 'underline' }}>  
                                             Create an Account  
                                         </a>  
                                     </p>  
