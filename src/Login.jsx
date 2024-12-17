@@ -58,16 +58,14 @@ function Login() {
             backgroundPosition: 'center',  
             height: '100vh',  
             display: 'flex',  
-            alignItems: 'center',  
-            justifyContent: 'center',  
         }}>  
-            <Container>  
-                <Row className="justify-content-md-center">  
-                    <Col md={4}>  
+            <Container fluid>  
+                <Row className="justify-content-end">  
+                    <Col md={4} lg={3} className="p-3">  
                         <div className="card" style={{  
                             backgroundColor: 'rgba(255, 255, 255, 0.8)',  
                             borderRadius: '10px',  
-                            padding: '30px',  
+                            padding: '20px',  
                         }}>  
                             <h2 style={{  
                                 textAlign: 'center',   
