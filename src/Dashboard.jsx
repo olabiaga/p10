@@ -1,74 +1,78 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
+import { jwtDecode } from 'jwt-decode';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
-import Form from 'react-bootstpra/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import Nav from 'react-bootstrap/Nav';
-import Button from 'react-bootstrap/Button';
-import { jwtDecode } from 'jwt-decode';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import { FormControl, Dropdown, DropdownButton } from 'react-bootstrap';
+import NavDropdown from 'react-bootstrap/NavDropdown'; 
 import { API_ENDPOINT } from './Api';
 
 function Dashboard() {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+    const [user, setUser] = useState(null); 
+    const navigate = useNavigate();
 
-  // Verify if User In-Session in LocalStorage
-  useEffect(() => {
-    const fetchDecodedUserID = async () => {
-      try {
-        const response = JSON.parse(localStorage.getItem('user'));
-        setUser(response.data);
+  
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+            
+            setUser(null);
+            navigate("/login");
+            return;
+        }
 
-        const decoded_token = jwtDecode(response.data.token);
-        setUser(decoded_token);
-      } catch (error) {
-        navigate("/login");
-      }
+        try {
+            const decoded_token = jwtDecode(token); 
+            console.log("Decoded Token:", decoded_token); 
+
+            if (decoded_token && decoded_token.username) {
+                setUser(decoded_token); 
+            } else {
+               
+                setUser(null);
+                navigate("/login");
+            }
+        } catch (error) {
+            console.error("Error decoding token", error);
+            setUser(null); 
+            navigate("/login"); 
+        }
+    }, [navigate]); nges
+
+   
+    const handleLogout = () => {
+        localStorage.removeItem('token'); 
+        setUser(null); 
+        navigate("/login"); 
     };
 
-    fetchDecodedUserID();
-  }, []);
+    return (
+        <>
+            <Navbar bg="light" variant="light">
+                <Container>
+                    <Navbar.Brand href="#home" style={{ color: '#5c4d3f' }}>Scent Aura</Navbar.Brand> 
+                    <Nav className="me-auto">
+                        <Nav.Link href="#home" style={{ color: '#5c4d3f' }}>Catalogue</Nav.Link>
+                        <Nav.Link href="#series" style={{ color: '#5c4d3f' }}>Shop</Nav.Link>
+                        <Nav.Link href="#movies" style={{ color: '#5c4d3f' }}>Solutions</Nav.Link>
+                    </Nav>
 
-  // Performs Logout Method
-  const handleLogout = async () => {
-    try {
-      localStorage.removeItem('token');
-      navigate('/login');
-    } catch (error) {
-      console.error('Logout failed', error);
-    }
-  };
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="ms-auto">
+                            <NavDropdown title={user ? `User: ${user.username}` : 'Loading...'} id="basic-nav-dropdown" align="end">
+                                <NavDropdown.Item href="#">Profile</NavDropdown.Item>
+                                <NavDropdown.Item href="#">Settings</NavDropdown.Item>
+                                <NavDropdown.Item href="#" onClick={handleLogout}>Logout</NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
 
-  // Renders the Navbar component
-  return (
-    <Navbar bg="success" data-bs-theme="dark">
-      <Container>
-        <Navbar.Brand href="#home">Naga College Foundation, Inc.</Navbar.Brand>
-        <Nav className="me-auto">
-          <Nav.Link href="#users">Users</Nav.Link>
-          <Nav.Link href="#departments">Departments</Nav.Link>
-          <Nav.Link href="#courses">Courses</Nav.Link>
-        </Nav>
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
-            <NavDropdown title={user ? user.username : 'Dropdown'} id="basic-nav-dropdown" align="end">
-              <NavDropdown.Item href="#">Profile</NavDropdown.Item>
-              <NavDropdown.Item href="#">Settings</NavDropdown.Item>
-              <NavDropdown.Item href="#" onClick={handleLogout}>Logout</NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-  );
+            {/* Add more Dashboard content here */}
+        </>
+    );
 }
 
 export default Dashboard;
